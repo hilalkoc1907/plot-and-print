@@ -1,0 +1,38 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Filmler{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h2>Filmler</h2>
+    <p class="text-muted mb-0">{{ paginator.count }} sonuç</p>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Film adı veya yönetmen ara...">
+    </div>
+    <div class="col-md-4">
+        <select name="category" class="form-select">
+            <option value="">Tüm kategoriler</option>
+            {% for cat in categories %}
+                <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Ara</button>
+        <a href="{% url 'movie_list' %}" class="btn btn-outline-secondary">Temizle</a>
+    </div>
+</form>
+
+<div class="row">
+    {% for movie in movies %}
+       {% include 'reviews/_card.html' with item=movie subtitle=movie.director url_name='movie_detail' icon='🎬' hint='film' %}
+    {% empty %}
+        <p class="text-muted">Sonuç bulunamadı.</p>
+    {% endfor %}
+</div>
+
+{% include 'reviews/_pagination.html' %}
+{% endblock %}

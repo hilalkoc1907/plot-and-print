@@ -1,0 +1,67 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Ana Sayfa · Plot&Print{% endblock %}
+
+{% block content %}
+<section class="hero mb-4">
+    <h1>Okuduğun ve izlediğin her şey için bir yorum</h1>
+    <p class="mb-4">Kitap ve filmleri keşfet, puanla, düşüncelerini paylaş.</p>
+    <div class="d-flex justify-content-center gap-2 flex-wrap mb-4">
+        <a href="{% url 'book_list' %}" class="btn btn-light">📚 Kitapları Keşfet</a>
+        <a href="{% url 'movie_list' %}" class="btn btn-outline-light">🎬 Filmleri Keşfet</a>
+    </div>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <div class="stat"><strong>{{ book_count }}</strong><small>Kitap</small></div>
+        <div class="stat"><strong>{{ movie_count }}</strong><small>Film</small></div>
+        <div class="stat"><strong>{{ review_count }}</strong><small>Yorum</small></div>
+    </div>
+</section>
+
+<div class="section-title">
+    <h3>En Yüksek Puanlı Kitaplar</h3>
+    <a href="{% url 'book_list' %}" class="btn btn-outline-primary btn-sm">Tümü</a>
+</div>
+<div class="row">
+    {% for book in top_books %}
+        {% include 'reviews/_card.html' with item=book subtitle=book.author url_name='book_detail' icon='📚' hint='novel' %}
+    {% empty %}
+        <p class="text-muted">Henüz kitap eklenmemiş.</p>
+    {% endfor %}
+</div>
+
+<div class="section-title">
+    <h3>En Yüksek Puanlı Filmler</h3>
+    <a href="{% url 'movie_list' %}" class="btn btn-outline-primary btn-sm">Tümü</a>
+</div>
+<div class="row">
+    {% for movie in top_movies %}
+        {% include 'reviews/_card.html' with item=movie subtitle=movie.director url_name='movie_detail' icon='🎬' hint='film' %}
+    {% empty %}
+        <p class="text-muted">Henüz film eklenmemiş.</p>
+    {% endfor %}
+</div>
+
+<div class="section-title"><h3>Son Yorumlar</h3></div>
+{% for review in latest_reviews %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <strong>{{ review.user.username }}</strong>
+                <span class="text-muted">yorumladı:</span>
+                {% if review.book %}
+                    <a href="{% url 'book_detail' review.book.pk %}">📚 {{ review.book.title }}</a>
+                {% else %}
+                    <a href="{% url 'movie_detail' review.movie.pk %}">🎬 {{ review.movie.title }}</a>
+                {% endif %}
+            </div>
+            <span class="rating-pill">★ {{ review.rating }}/5</span>
+        </div>
+        <p class="mt-2 mb-1">{{ review.comment|truncatechars:140 }}</p>
+        <small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+    </div>
+</div>
+{% empty %}
+<p class="text-muted">Henüz yorum yok.</p>
+{% endfor %}
+{% endblock %}

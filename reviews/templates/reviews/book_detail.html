@@ -1,0 +1,79 @@
+{% extends 'reviews/base.html' %}
+{% load wiki_extras %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4 g-4 align-items-start">
+    <div class="col-md-3">
+        {% if book.cover_image %}
+            <img src="{{ book.cover_image.url }}" class="detail-cover" alt="{{ book.title }}">
+        {% else %}
+            {% wiki_image book.title 'novel' as wimg %}
+            {% if wimg %}
+                <img src="{{ wimg }}" class="detail-cover" alt="{{ book.title }}">
+            {% else %}
+                <div class="cover-ph rounded" style="height:260px; border-radius:18px;">📚</div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col">
+        <h2 class="mb-1">{{ book.title }}</h2>
+        <p class="text-muted mb-2">{{ book.author }}{% if book.release_year %} · {{ book.release_year }}{% endif %}</p>
+
+        {% if book.category %}
+            <span class="badge bg-secondary mb-3">{{ book.category }}</span>
+        {% endif %}
+
+        {% if avg_rating %}
+            <p class="fs-5 mb-3">
+                <span class="rating-pill">★ {{ avg_rating|floatformat:1 }}/5</span>
+                <small class="text-muted">({{ reviews|length }} yorum)</small>
+            </p>
+        {% else %}
+            <p class="text-muted mb-3">Henüz puan verilmemiş.</p>
+        {% endif %}
+
+        <p>{{ book.description }}</p>
+
+        {% if book.added_by %}
+            <small class="text-muted">Ekleyen: {{ book.added_by.username }}</small>
+        {% endif %}
+    </div>
+</div>
+
+<hr>
+
+<div class="section-title">
+    <h3 class="mb-0">Yorumlar ({{ reviews|length }})</h3>
+    {% if user.is_authenticated %}
+        <a href="{% url 'book_review_add' book.pk %}" class="btn btn-success btn-sm">Yorum Yaz</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Yorum yazmak için giriş yap</a>
+    {% endif %}
+</div>
+
+{% for review in reviews %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <strong>{{ review.user.username }}</strong>
+            <span class="rating-pill">★ {{ review.rating }}/5</span>
+        </div>
+        <p class="mt-2 mb-1">{{ review.comment }}</p>
+        <small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+
+        {% if review.user == user %}
+        <div class="mt-2">
+            <a href="{% url 'review_edit' review.pk %}" class="btn btn-outline-primary btn-sm">Düzenle</a>
+            <a href="{% url 'review_delete' review.pk %}" class="btn btn-outline-danger btn-sm">Sil</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p class="text-muted">Bu kitap için henüz yorum yok. İlk yorumu sen yaz!</p>
+{% endfor %}
+
+<a href="{% url 'book_list' %}" class="btn btn-outline-secondary mt-3">← Kitaplara dön</a>
+{% endblock %}

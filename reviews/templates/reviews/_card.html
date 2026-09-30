@@ -1,0 +1,31 @@
+{% load wiki_extras %}
+<div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card h-100 hover-lift">
+        {% if item.cover_image %}
+            <img src="{{ item.cover_image.url }}" class="card-img-top" alt="{{ item.title }}">
+        {% else %}
+            {% wiki_image item.title hint as wimg %}
+            {% if wimg %}
+                <img src="{{ wimg }}" class="card-img-top" alt="{{ item.title }}" loading="lazy">
+            {% else %}
+                <div class="cover-ph">{{ icon }}</div>
+            {% endif %}
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title mb-1">{{ item.title }}</h5>
+            <p class="text-muted small mb-2">{{ subtitle }}{% if item.release_year %} · {{ item.release_year }}{% endif %}</p>
+            {% if item.category %}<span class="badge bg-secondary">{{ item.category }}</span>{% endif %}
+            <div class="mt-2">
+                {% if item.avg_rating %}
+                    <span class="rating-pill">★ {{ item.avg_rating|floatformat:1 }}/5</span>
+                    <small class="text-muted">({{ item.review_count }} yorum)</small>
+                {% else %}
+                    <small class="text-muted">Henüz puan yok</small>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{% url url_name item.pk %}" class="btn btn-primary btn-sm w-100">Detay ve Yorumlar</a>
+        </div>
+    </div>
+</div>

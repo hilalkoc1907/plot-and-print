@@ -1,0 +1,17 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Yorum Yaz{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Yorum Yaz</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Gönder</button>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary">İptal</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

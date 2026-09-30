@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Plot Print{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mint: #2dd4bf;
+            --mint-light: #e3faf5;
+            --blue: #3b82f6;
+            --blue-dark: #1e4fa3;
+            --ink: #12304a;
+            --muted: #6b8299;
+            --bg: #f3fbf9;
+            --grad: linear-gradient(135deg, #5eead4 0%, #60a5fa 100%);
+            --grad-deep: linear-gradient(135deg, #2dd4bf 0%, #3b82f6 100%);
+            --bs-primary: #3b82f6;
+            --bs-primary-rgb: 59, 130, 246;
+            --bs-link-color: #2563eb;
+            --bs-link-hover-color: #1d4ed8;
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+        main { flex: 1; }
+        h1, h2, h3, h4, h5 { font-weight: 700; letter-spacing: -0.02em; }
+        .text-muted { color: var(--muted) !important; }
+
+        /* Navbar */
+        .glass-nav { background: rgba(255,255,255,.85); backdrop-filter: blur(10px); border-bottom: 1px solid #dff1ec; }
+        .brand { font-weight: 800; color: var(--ink) !important; display: flex; align-items: center; gap: .55rem; }
+        .brand .logo { width: 34px; height: 34px; border-radius: 10px; background: var(--grad-deep); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
+        .brand span.accent { background: var(--grad-deep); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .glass-nav .nav-link { color: var(--ink); font-weight: 500; border-radius: 999px; padding: .45rem 1rem !important; }
+        .glass-nav .nav-link:hover { background: var(--mint-light); }
+        .glass-nav .nav-link.active { background: var(--mint-light); color: var(--blue-dark); font-weight: 700; }
+
+        /* Butonlar */
+        .btn { border-radius: 999px; font-weight: 600; padding-inline: 1.1rem; }
+        .btn-sm { padding-inline: .9rem; }
+        .btn-primary { --bs-btn-bg: #3b82f6; --bs-btn-border-color: #3b82f6; --bs-btn-hover-bg: #2563eb; --bs-btn-hover-border-color: #2563eb; --bs-btn-active-bg: #1d4ed8; --bs-btn-active-border-color: #1d4ed8; }
+        .btn-success { --bs-btn-bg: #14b8a6; --bs-btn-border-color: #14b8a6; --bs-btn-hover-bg: #0d9488; --bs-btn-hover-border-color: #0d9488; --bs-btn-active-bg: #0f766e; --bs-btn-active-border-color: #0f766e; }
+        .btn-outline-primary { --bs-btn-color: #2563eb; --bs-btn-border-color: #93c5fd; --bs-btn-hover-bg: #3b82f6; --bs-btn-hover-border-color: #3b82f6; }
+        .btn-outline-secondary { --bs-btn-color: var(--muted); --bs-btn-border-color: #cfe3e0; --bs-btn-hover-bg: #e3faf5; --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #cfe3e0; }
+
+        /* Kartlar */
+        .card { border: 0; border-radius: 18px; box-shadow: 0 6px 24px rgba(30, 80, 120, .08); overflow: hidden; }
+        .hover-lift { transition: transform .2s, box-shadow .2s; }
+        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 14px 34px rgba(30, 80, 120, .15); }
+        .card-img-top { height: 220px; object-fit: cover; }
+        .card-footer { background: transparent; border-top: 0; padding: 0 1rem 1rem; }
+        .cover-ph { height: 180px; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 3.2rem; }
+        .detail-cover { width: 100%; max-height: 420px; object-fit: cover; border-radius: 18px; box-shadow: 0 10px 30px rgba(30,80,120,.15); }
+
+        /* Rozetler */
+        .badge.bg-secondary { background: #dbeafe !important; color: #1e40af !important; font-weight: 600; }
+        .badge.bg-warning { background: var(--mint-light) !important; color: #0f766e !important; font-weight: 700; }
+        .rating-pill { background: var(--mint-light); color: #0f766e; border-radius: 999px; padding: .2rem .65rem; font-weight: 700; font-size: .85rem; }
+
+        /* Formlar */
+        .form-control, .form-select { border-radius: 12px; border: 1px solid #d3e6e2; padding: .6rem .9rem; }
+        .form-control:focus, .form-select:focus { border-color: var(--mint); box-shadow: 0 0 0 .2rem rgba(45, 212, 191, .2); }
+        main form p { margin-bottom: 1rem; }
+        main form p label { display: block; font-weight: 600; margin-bottom: .3rem; }
+        main form p input:not([type=checkbox]), main form p select, main form p textarea { width: 100%; border: 1px solid #d3e6e2; border-radius: 12px; padding: .6rem .9rem; background: #fff; }
+        main form p input:focus, main form p select:focus, main form p textarea:focus { outline: none; border-color: var(--mint); box-shadow: 0 0 0 .2rem rgba(45, 212, 191, .2); }
+        main form .helptext, main form ul { font-size: .82rem; color: var(--muted); }
+
+        /* Sayfalama */
+        .page-link { border: 0; border-radius: 10px !important; margin: 0 3px; color: var(--blue-dark); font-weight: 600; }
+        .page-link:hover { background: var(--mint-light); }
+        .page-item.active .page-link { background: var(--grad-deep); color: #fff; }
+
+        /* Ana sayfa */
+        .hero { background: var(--grad-deep); color: #fff; border-radius: 28px; padding: 4rem 2rem; text-align: center; position: relative; overflow: hidden; }
+        .hero::after { content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,.14); right: -80px; top: -100px; }
+        .hero h1 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800; position: relative; z-index: 1; }
+        .hero p { font-size: 1.1rem; opacity: .95; position: relative; z-index: 1; }
+        .hero .btn { position: relative; z-index: 1; }
+        .stat { background: rgba(255,255,255,.2); border-radius: 16px; padding: .8rem 1.6rem; min-width: 120px; position: relative; z-index: 1; }
+        .stat strong { display: block; font-size: 1.6rem; font-weight: 800; }
+        .stat small { opacity: .9; }
+        .section-title { display: flex; align-items: center; justify-content: space-between; margin: 2.5rem 0 1.2rem; }
+        .section-title h3 { margin: 0; }
+        .page-head { margin-bottom: 1.5rem; }
+
+        footer { color: var(--muted); font-size: .9rem; border-top: 1px solid #dff1ec; background: #fff; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top glass-nav mb-4">
+        <div class="container">
+            <a class="navbar-brand brand" href="{% url 'home' %}">
+                <span class="logo">Y</span><span>Plot<span class="accent">&Print</span></span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Ana Sayfa</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'book_list' or request.resolver_match.url_name == 'book_detail' %}active{% endif %}" href="{% url 'book_list' %}">Kitaplar</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'movie_list' or request.resolver_match.url_name == 'movie_detail' %}active{% endif %}" href="{% url 'movie_list' %}">Filmler</a>
+                </div>
+                <div class="navbar-nav align-items-lg-center gap-lg-2">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-2">Merhaba, <strong>{{ user.username }}</strong></span>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Çıkış</button>
+                        </form>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'login' %}">Giriş</a>
+                        <a class="btn btn-primary btn-sm" href="{% url 'register' %}">Kayıt Ol</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container pb-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="py-4 mt-auto">
+        <div class="container text-center">© Plot&Print · Kitap ve film yorumları</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

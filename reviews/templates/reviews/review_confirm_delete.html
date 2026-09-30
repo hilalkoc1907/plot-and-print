@@ -1,0 +1,18 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Yorumu Sil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4">Yorumu Sil</h2>
+        <p>Bu yorumu silmek istediğine emin misin?</p>
+        <blockquote class="border-start ps-3 text-muted">{{ object.comment }}</blockquote>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Evet, sil</button>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary">Vazgeç</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
