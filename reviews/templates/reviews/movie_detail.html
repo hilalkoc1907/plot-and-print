@@ -1,21 +1,17 @@
 {% extends 'reviews/base.html' %}
-{% load wiki_extras %}
 
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block content %}
 <div class="row mb-4 g-4 align-items-start">
     <div class="col-md-3">
-        {% if movie.cover_image %}
-            <img src="{{ movie.cover_image.url }}" class="detail-cover" alt="{{ movie.title }}">
-        {% else %}
-            {% wiki_image movie.title 'film' as wimg %}
-            {% if wimg %}
-                <img src="{{ wimg }}" class="detail-cover" alt="{{ movie.title }}">
-            {% else %}
-                <div class="cover-ph rounded" style="height:260px; border-radius:18px;">🎬</div>
-            {% endif %}
-        {% endif %}
+     {% if movie.cover_image %}
+    <img src="{{ movie.cover_image.url }}" class="detail-cover" alt="{{ movie.title }}">
+{% elif movie.wiki_image_url %}
+    <img src="{{ movie.wiki_image_url }}" class="detail-cover" alt="{{ movie.title }}">
+{% else %}
+    <div class="cover-ph rounded" style="height:260px; border-radius:18px;">🎬</div>
+{% endif %}
     </div>
     <div class="col">
         <h2 class="mb-1">{{ movie.title }}</h2>

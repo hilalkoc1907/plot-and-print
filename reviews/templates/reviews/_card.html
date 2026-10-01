@@ -1,15 +1,11 @@
-{% load wiki_extras %}
 <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card h-100 hover-lift">
         {% if item.cover_image %}
             <img src="{{ item.cover_image.url }}" class="card-img-top" alt="{{ item.title }}">
+        {% elif item.wiki_image_url %}
+            <img src="{{ item.wiki_image_url }}" class="card-img-top" alt="{{ item.title }}" loading="lazy">
         {% else %}
-            {% wiki_image item.title hint as wimg %}
-            {% if wimg %}
-                <img src="{{ wimg }}" class="card-img-top" alt="{{ item.title }}" loading="lazy">
-            {% else %}
-                <div class="cover-ph">{{ icon }}</div>
-            {% endif %}
+            <div class="cover-ph">{{ icon }}</div>
         {% endif %}
         <div class="card-body">
             <h5 class="card-title mb-1">{{ item.title }}</h5>

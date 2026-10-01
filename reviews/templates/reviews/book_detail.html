@@ -1,21 +1,18 @@
 {% extends 'reviews/base.html' %}
-{% load wiki_extras %}
+
 
 {% block title %}{{ book.title }}{% endblock %}
 
 {% block content %}
 <div class="row mb-4 g-4 align-items-start">
     <div class="col-md-3">
-        {% if book.cover_image %}
-            <img src="{{ book.cover_image.url }}" class="detail-cover" alt="{{ book.title }}">
-        {% else %}
-            {% wiki_image book.title 'novel' as wimg %}
-            {% if wimg %}
-                <img src="{{ wimg }}" class="detail-cover" alt="{{ book.title }}">
-            {% else %}
-                <div class="cover-ph rounded" style="height:260px; border-radius:18px;">📚</div>
-            {% endif %}
-        {% endif %}
+      {% if book.cover_image %}
+    <img src="{{ book.cover_image.url }}" class="detail-cover" alt="{{ book.title }}">
+{% elif book.wiki_image_url %}
+    <img src="{{ book.wiki_image_url }}" class="detail-cover" alt="{{ book.title }}">
+{% else %}
+    <div class="cover-ph rounded" style="height:260px; border-radius:18px;">📚</div>
+{% endif %}
     </div>
     <div class="col">
         <h2 class="mb-1">{{ book.title }}</h2>

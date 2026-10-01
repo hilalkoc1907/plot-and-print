@@ -19,6 +19,7 @@ class Book(models.Model):
     release_year = models.PositiveIntegerField(null=True, blank=True, verbose_name="Yayın Yılı")
     description = models.TextField(blank=True, verbose_name="Açıklama")
     cover_image = models.ImageField(upload_to='covers/', blank=True, null=True)
+    wiki_image_url = models.URLField(blank=True, null=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='added_books', verbose_name="Ekleyen")
 
     def __str__(self):
@@ -32,6 +33,7 @@ class Movie(models.Model):
     release_year = models.PositiveIntegerField(null=True, blank=True, verbose_name="Çıkış Yılı")
     description = models.TextField(blank=True, verbose_name="Açıklama")
     cover_image = models.ImageField(upload_to='covers/', blank=True, null=True)
+    wiki_image_url = models.URLField(blank=True, null=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='added_movies', verbose_name="Ekleyen")
 
     def __str__(self):
